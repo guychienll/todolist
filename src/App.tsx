@@ -27,7 +27,7 @@ function App() {
     title: "",
     process: ENUM_ITEM_PROCESS_TYPE.UNKNOWN,
   } as Item);
-  const itemBufferChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const changeItemBufferHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     let cloneItemBuffer = { ...itemBuffer };
     cloneItemBuffer.title = value;
@@ -35,7 +35,7 @@ function App() {
     cloneItemBuffer.process = ENUM_ITEM_PROCESS_TYPE.UNDONE;
     setItemBuffer(cloneItemBuffer);
   };
-  const AddClickHandler = () => {
+  const AddItemHandler = () => {
     let cloneItems = [...items];
     cloneItems.push(itemBuffer);
     setItems(cloneItems);
@@ -45,7 +45,7 @@ function App() {
       process: ENUM_ITEM_PROCESS_TYPE.UNKNOWN,
     } as Item);
   };
-  const clickedItemHandler = (id: string) => {
+  const clickItemHandler = (id: string) => {
     let cloneItems = [...items];
     const itemIndexWhichWouldBeDeleted = cloneItems.findIndex((item) => {
       return item.id === id;
@@ -58,11 +58,11 @@ function App() {
     <Container>
       <h1>TO DO LIST</h1>
       <Form
-        itemBufferChangeHandler={itemBufferChangeHandler}
-        AddClickHandler={AddClickHandler}
+        changeItemBufferHandler={changeItemBufferHandler}
+        AddItemHandler={AddItemHandler}
         itemBuffer={itemBuffer}
       />
-      <List clickedItemHandler={clickedItemHandler} items={items} />
+      <List clickItemHandler={clickItemHandler} items={items} />
     </Container>
   );
 }

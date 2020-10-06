@@ -4,7 +4,7 @@ import { Item } from "../interface/Item";
 
 interface IProps {
   items: Item[];
-  clickedItemHandler: (id: string) => void;
+  clickItemHandler: (id: string) => void;
 }
 const StyledList = styled.ul`
   margin: 10px;
@@ -22,7 +22,7 @@ const StyledList = styled.ul`
     }
   }
 `;
-export function List({ items, clickedItemHandler }: IProps) {
+export function List({ items, clickItemHandler }: IProps) {
   return (
     <StyledList>
       {items
@@ -35,7 +35,7 @@ export function List({ items, clickedItemHandler }: IProps) {
               key={item.id}
               data-testid="item"
               onClick={(e: React.MouseEvent<HTMLLIElement>) => {
-                clickedItemHandler(item.id);
+                clickItemHandler(item.id);
               }}
             >
               {item.title}

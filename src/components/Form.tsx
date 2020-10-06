@@ -17,26 +17,26 @@ export const StyledForm = styled.div`
 `;
 
 interface IProps {
-  itemBufferChangeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  AddClickHandler: () => void;
+  changeItemBufferHandler: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  AddItemHandler: () => void;
   itemBuffer: Item;
 }
 export function Form({
-  itemBufferChangeHandler,
-  AddClickHandler,
+  changeItemBufferHandler,
+  AddItemHandler,
   itemBuffer,
 }: IProps) {
   return (
     <StyledForm>
       <input
-        onChange={itemBufferChangeHandler}
+        onChange={changeItemBufferHandler}
         type="text"
         name="title"
         value={itemBuffer.title}
         placeholder="please enter your items..."
         data-testid="todoInput"
       />
-      <button onClick={AddClickHandler} data-testid="addButton">
+      <button onClick={AddItemHandler} data-testid="addButton">
         Add
       </button>
     </StyledForm>
