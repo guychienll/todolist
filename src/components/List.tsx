@@ -4,7 +4,8 @@ import { Item } from "../interface/Item";
 
 interface IProps {
   items: Item[];
-  clickItemHandler: (id: string) => void;
+  AddItemInWorkingBuffer: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  workingBuffer: string[];
 }
 const StyledList = styled.ul`
   margin: 10px;
@@ -17,12 +18,12 @@ const StyledList = styled.ul`
     white-space: nowrap;
     overflow-x: hidden;
     text-overflow: ellipsis;
-    &::before {
-      content: "。";
+    button {
+      margin: 0 0 0 20px;
     }
   }
 `;
-export function List({ items, clickItemHandler }: IProps) {
+export function List({ items, AddItemInWorkingBuffer, workingBuffer }: IProps) {
   return (
     <StyledList>
       {items
@@ -31,14 +32,15 @@ export function List({ items, clickItemHandler }: IProps) {
         })
         .map((item) => {
           return (
-            <li
-              key={item.id}
-              data-testid="item"
-              onClick={(e: React.MouseEvent<HTMLLIElement>) => {
-                clickItemHandler(item.id);
-              }}
-            >
-              {item.title}
+            <li key={item.id} data-testid="item">
+              <input
+                type="checkbox"
+                id={item.id}
+                value={item.id}
+                onChange={AddItemInWorkingBuffer}
+                checked={workingBuffer.includes(item.id)}
+              />
+              <label htmlFor={item.id}>{item.title}</label>
             </li>
           );
         })}

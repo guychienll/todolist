@@ -6,7 +6,7 @@ export const StyledForm = styled.div`
   height: 44px;
   input {
     box-sizing: border-box;
-    width: 280px;
+    width: 250px;
     height: inherit;
     padding-left: 10px;
     border-right: none;

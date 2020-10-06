@@ -27,6 +27,8 @@ function App() {
     title: "",
     process: ENUM_ITEM_PROCESS_TYPE.UNKNOWN,
   } as Item);
+  const [workingBuffer, setWorkingBuffer] = useState([] as string[]);
+
   const changeItemBufferHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     let cloneItemBuffer = { ...itemBuffer };
@@ -45,13 +47,32 @@ function App() {
       process: ENUM_ITEM_PROCESS_TYPE.UNKNOWN,
     } as Item);
   };
-  const clickItemHandler = (id: string) => {
-    let cloneItems = [...items];
-    const itemIndexWhichWouldBeDeleted = cloneItems.findIndex((item) => {
-      return item.id === id;
+
+  const deleteItemsHandler = () => {
+    workingBuffer.forEach((id) => {
+      const cloneItems = items;
+      const itemIndexWhichWouldBeDeleted = cloneItems.findIndex((item) => {
+        return item.id === id;
+      });
+      cloneItems.splice(itemIndexWhichWouldBeDeleted, 1);
+      setItems(cloneItems);
     });
-    cloneItems.splice(itemIndexWhichWouldBeDeleted, 1);
-    setItems(cloneItems);
+    setWorkingBuffer([]);
+  };
+
+  const AddItemInWorkingBuffer = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, checked } = e.target;
+    let cloneWorkingBuffer = [...workingBuffer];
+    const indexOfWorkingBuffer = cloneWorkingBuffer.findIndex((id) => {
+      return id === value;
+    });
+    if (checked) {
+      cloneWorkingBuffer.push(value);
+      setWorkingBuffer(cloneWorkingBuffer);
+      return;
+    }
+    cloneWorkingBuffer.splice(indexOfWorkingBuffer, 1);
+    setWorkingBuffer(cloneWorkingBuffer);
   };
 
   return (
@@ -62,7 +83,18 @@ function App() {
         AddItemHandler={AddItemHandler}
         itemBuffer={itemBuffer}
       />
-      <List clickItemHandler={clickItemHandler} items={items} />
+      <List
+        workingBuffer={workingBuffer}
+        AddItemInWorkingBuffer={AddItemInWorkingBuffer}
+        items={items}
+      />
+      <button
+        onClick={deleteItemsHandler}
+        disabled={workingBuffer.length <= 0}
+        data-testid="deleteButton"
+      >
+        Delete
+      </button>
     </Container>
   );
 }
