@@ -18,13 +18,17 @@ export const StyledForm = styled.div`
 
 interface IProps {
   changeItemBufferHandler: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  AddItemHandler: () => void;
+  saveItemHandler: () => void;
+  addItemHandler: () => void;
   itemBuffer: Item;
+  isEditing: boolean;
 }
 export function Form({
   changeItemBufferHandler,
-  AddItemHandler,
+  addItemHandler,
+  saveItemHandler,
   itemBuffer,
+  isEditing,
 }: IProps) {
   return (
     <StyledForm>
@@ -36,8 +40,11 @@ export function Form({
         placeholder="please enter your items..."
         data-testid="todoInput"
       />
-      <button onClick={AddItemHandler} data-testid="addButton">
-        Add
+      <button
+        onClick={isEditing ? saveItemHandler : addItemHandler}
+        data-testid={isEditing ? "saveButton" : "addButton"}
+      >
+        {isEditing ? "Save" : "Add"}
       </button>
     </StyledForm>
   );

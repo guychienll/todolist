@@ -1,3 +1,4 @@
+import { Tools } from "./components/Tools";
 import React, { useState } from "react";
 import styled from "styled-components";
 import { ENUM_ITEM_PROCESS_TYPE } from "./enum/ENUM_ITEM_PROCESS_TYPE";
@@ -28,6 +29,7 @@ function App() {
     process: ENUM_ITEM_PROCESS_TYPE.UNKNOWN,
   } as Item);
   const [workingBuffer, setWorkingBuffer] = useState([] as string[]);
+  const [isEditing, setIsEditing] = useState(false);
 
   const changeItemBufferHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -37,7 +39,7 @@ function App() {
     cloneItemBuffer.process = ENUM_ITEM_PROCESS_TYPE.UNDONE;
     setItemBuffer(cloneItemBuffer);
   };
-  const AddItemHandler = () => {
+  const addItemHandler = () => {
     let cloneItems = [...items];
     cloneItems.push(itemBuffer);
     setItems(cloneItems);
@@ -47,7 +49,6 @@ function App() {
       process: ENUM_ITEM_PROCESS_TYPE.UNKNOWN,
     } as Item);
   };
-
   const deleteItemsHandler = () => {
     workingBuffer.forEach((id) => {
       const cloneItems = items;
@@ -59,7 +60,6 @@ function App() {
     });
     setWorkingBuffer([]);
   };
-
   const AddItemInWorkingBuffer = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
     let cloneWorkingBuffer = [...workingBuffer];
@@ -74,13 +74,43 @@ function App() {
     cloneWorkingBuffer.splice(indexOfWorkingBuffer, 1);
     setWorkingBuffer(cloneWorkingBuffer);
   };
+  const clickEditHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const { value } = e.currentTarget;
+    let cloneItemBuffer = { ...itemBuffer };
+    const itemWouldBeUpdated = items.filter((item) => {
+      return item.id === value;
+    })[0];
+    cloneItemBuffer.id = itemWouldBeUpdated.id;
+    cloneItemBuffer.title = itemWouldBeUpdated.title;
+    cloneItemBuffer.process = itemWouldBeUpdated.process;
+    setIsEditing(true);
+    setItemBuffer(cloneItemBuffer);
+  };
+
+  const saveItemHandler = () => {
+    let cloneItems = [...items];
+    const indexOfEditingItem = cloneItems.findIndex((item) => {
+      return item.id === itemBuffer.id;
+    });
+    cloneItems.splice(indexOfEditingItem, 1, itemBuffer);
+    setItems(cloneItems);
+    setItemBuffer({
+      id: "",
+      title: "",
+      process: ENUM_ITEM_PROCESS_TYPE.UNKNOWN,
+    } as Item);
+    setIsEditing(false);
+    setWorkingBuffer([]);
+  };
 
   return (
     <Container>
       <h1>TO DO LIST</h1>
       <Form
+        isEditing={isEditing}
         changeItemBufferHandler={changeItemBufferHandler}
-        AddItemHandler={AddItemHandler}
+        addItemHandler={addItemHandler}
+        saveItemHandler={saveItemHandler}
         itemBuffer={itemBuffer}
       />
       <List
@@ -88,13 +118,11 @@ function App() {
         AddItemInWorkingBuffer={AddItemInWorkingBuffer}
         items={items}
       />
-      <button
-        onClick={deleteItemsHandler}
-        disabled={workingBuffer.length <= 0}
-        data-testid="deleteButton"
-      >
-        Delete
-      </button>
+      <Tools
+        clickEditHandler={clickEditHandler}
+        workingBuffer={workingBuffer}
+        deleteItemsHandler={deleteItemsHandler}
+      />
     </Container>
   );
 }

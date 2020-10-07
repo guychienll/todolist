@@ -39,20 +39,6 @@ test("when the item pushed into item list should clean up the input", () => {
   expect(input.value).toBe("");
 });
 
-test.skip("when item be clicked should shift from the items", () => {
-  //arrange
-  const { getByTestId, getByText, queryByText } = render(<App></App>);
-  const input = getByTestId(/todoInput/) as HTMLInputElement;
-  const addButton = getByTestId(/addButton/);
-  //act
-  fireEvent.change(input, { target: { value: "go to bank" } });
-  fireEvent.click(addButton);
-  const itemWouldBeDeleted = getByText(/go to bank/);
-  fireEvent.click(itemWouldBeDeleted);
-  //assert
-  expect(queryByText(/go to bank/)).toBeNull();
-});
-
 test("when item be clicked the item checkbox should be checked", () => {
   //arrange
   const { getByTestId, getByText } = render(<App></App>);
@@ -83,6 +69,20 @@ test("when no workingbuffer the delete button should be disabled", () => {
   expect(deleteButton.disabled).toBe(false);
 });
 
+test("when one record in workingbuffer the edit button should not be disabled", () => {
+  const { getByTestId, getByText } = render(<App></App>);
+  const input = getByTestId(/todoInput/) as HTMLInputElement;
+  const addButton = getByTestId(/addButton/);
+  const editButton = getByTestId(/editButton/) as HTMLButtonElement;
+  expect(editButton.disabled).toBe(true);
+  fireEvent.change(input, { target: { value: "go to bank" } });
+  fireEvent.click(addButton);
+  fireEvent.click(getByText(/go to bank/));
+  expect(editButton.disabled).toBe(false);
+  fireEvent.click(getByText(/go to bank/));
+  expect(editButton.disabled).toBe(true);
+});
+
 test("when clicked delete button should delete all items in working buffer", () => {
   const { getByTestId, getByText, queryByText } = render(<App></App>);
   const input = getByTestId(/todoInput/) as HTMLInputElement;
@@ -96,5 +96,35 @@ test("when clicked delete button should delete all items in working buffer", () 
   fireEvent.click(deleteButton);
 
   expect(queryByText(/go to hospital/)).not.toBeNull();
+  expect(queryByText(/go to bank/)).toBeNull();
+});
+
+test("when clicked edit button should take the record into item buffer", () => {
+  const { getByTestId, getByText } = render(<App></App>);
+  const input = getByTestId(/todoInput/) as HTMLInputElement;
+  const addButton = getByTestId(/addButton/) as HTMLButtonElement;
+  const editButton = getByTestId(/editButton/) as HTMLButtonElement;
+  fireEvent.change(input, { target: { value: "go to bank" } });
+  fireEvent.click(addButton);
+  fireEvent.click(getByText(/go to bank/));
+  fireEvent.click(editButton);
+  expect(input.value).toBe("go to bank");
+  expect(addButton.innerHTML).toBe("Save");
+});
+
+test("when clicked save button should update the change of the items", () => {
+  const { getByTestId, getByText, queryByText } = render(<App></App>);
+  const input = getByTestId(/todoInput/) as HTMLInputElement;
+  const addButton = getByTestId(/addButton/) as HTMLButtonElement;
+  const editButton = getByTestId(/editButton/) as HTMLButtonElement;
+  fireEvent.change(input, { target: { value: "go to bank" } });
+  fireEvent.click(addButton);
+  fireEvent.click(getByText(/go to bank/));
+  fireEvent.click(editButton);
+  const saveButton = getByTestId(/saveButton/) as HTMLButtonElement;
+  fireEvent.change(input, { target: { value: "buy a coffee" } });
+  fireEvent.click(saveButton);
+  expect(input.value).toBe("");
+  expect(queryByText(/buy a coffee/)).not.toBeNull();
   expect(queryByText(/go to bank/)).toBeNull();
 });
