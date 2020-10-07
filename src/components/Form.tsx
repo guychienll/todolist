@@ -4,15 +4,18 @@ import { Item } from "../interface/Item";
 
 export const StyledForm = styled.div`
   height: 44px;
+  display: flex;
+  align-items: center;
   input {
     box-sizing: border-box;
     width: 250px;
     height: inherit;
     padding-left: 10px;
-    border-right: none;
   }
   button {
     height: inherit;
+    width: 50px;
+    margin-left: 5px;
   }
 `;
 

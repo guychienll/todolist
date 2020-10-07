@@ -49,7 +49,7 @@ function App() {
       process: ENUM_ITEM_PROCESS_TYPE.UNKNOWN,
     } as Item);
   };
-  const deleteItemsHandler = () => {
+  const archiveItemsHandler = () => {
     workingBuffer.forEach((id) => {
       const cloneItems = items;
       const itemIndexWhichWouldBeDeleted = cloneItems.findIndex((item) => {
@@ -86,7 +86,6 @@ function App() {
     setIsEditing(true);
     setItemBuffer(cloneItemBuffer);
   };
-
   const saveItemHandler = () => {
     let cloneItems = [...items];
     const indexOfEditingItem = cloneItems.findIndex((item) => {
@@ -121,7 +120,7 @@ function App() {
       <Tools
         clickEditHandler={clickEditHandler}
         workingBuffer={workingBuffer}
-        deleteItemsHandler={deleteItemsHandler}
+        archiveItemsHandler={archiveItemsHandler}
         isEditing={isEditing}
       />
     </Container>

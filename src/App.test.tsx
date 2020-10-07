@@ -8,10 +8,22 @@ test("the element should existed when initialization", () => {
   const title = queryByText(/TO DO LIST/);
   const input = queryByTestId(/todoInput/);
   const addButton = queryByTestId(/addButton/);
+  const archiveButton = queryByTestId(/archiveButton/);
+  const editButton = queryByTestId(/editButton/);
+  const saveButton = queryByTestId(/saveButton/);
+  const doneButton = queryByTestId(/^doneButton$/);
+  const undoneButton = queryByTestId(/undoneButton/);
+  const archivedButton = queryByTestId(/archivedButton/);
   //assert
   expect(title).not.toBeNull();
   expect(input).not.toBeNull();
   expect(addButton).not.toBeNull();
+  expect(archiveButton).not.toBeNull();
+  expect(editButton).not.toBeNull();
+  expect(doneButton).not.toBeNull();
+  expect(undoneButton).not.toBeNull();
+  expect(archivedButton).not.toBeNull();
+  expect(saveButton).toBeNull();
 });
 
 test("when click add button will push an item into item list", () => {
@@ -61,12 +73,12 @@ test("when no workingbuffer the delete button should be disabled", () => {
   const { getByTestId, getByText } = render(<App></App>);
   const input = getByTestId(/todoInput/) as HTMLInputElement;
   const addButton = getByTestId(/addButton/);
-  const deleteButton = getByTestId(/deleteButton/) as HTMLButtonElement;
-  expect(deleteButton.disabled).toBe(true);
+  const archiveButton = getByTestId(/archiveButton/) as HTMLButtonElement;
+  expect(archiveButton.disabled).toBe(true);
   fireEvent.change(input, { target: { value: "go to bank" } });
   fireEvent.click(addButton);
   fireEvent.click(getByText(/go to bank/));
-  expect(deleteButton.disabled).toBe(false);
+  expect(archiveButton.disabled).toBe(false);
 });
 
 test("when one record in workingbuffer the edit button should not be disabled", () => {
@@ -87,13 +99,13 @@ test("when clicked delete button should delete all items in working buffer", () 
   const { getByTestId, getByText, queryByText } = render(<App></App>);
   const input = getByTestId(/todoInput/) as HTMLInputElement;
   const addButton = getByTestId(/addButton/);
-  const deleteButton = getByTestId(/deleteButton/) as HTMLButtonElement;
+  const archiveButton = getByTestId(/archiveButton/) as HTMLButtonElement;
   fireEvent.change(input, { target: { value: "go to bank" } });
   fireEvent.click(addButton);
   fireEvent.change(input, { target: { value: "go to hospital" } });
   fireEvent.click(addButton);
   fireEvent.click(getByText(/go to bank/));
-  fireEvent.click(deleteButton);
+  fireEvent.click(archiveButton);
 
   expect(queryByText(/go to hospital/)).not.toBeNull();
   expect(queryByText(/go to bank/)).toBeNull();
@@ -134,11 +146,11 @@ test("when editing the edit and delete button should be disabled", () => {
   const input = getByTestId(/todoInput/) as HTMLInputElement;
   const addButton = getByTestId(/addButton/) as HTMLButtonElement;
   const editButton = getByTestId(/editButton/) as HTMLButtonElement;
-  const deleteButton = getByTestId(/deleteButton/) as HTMLButtonElement;
+  const archiveButton = getByTestId(/archiveButton/) as HTMLButtonElement;
   fireEvent.change(input, { target: { value: "go to bank" } });
   fireEvent.click(addButton);
   fireEvent.click(getByText(/go to bank/));
   fireEvent.click(editButton);
   expect(editButton.disabled).toBe(true);
-  expect(deleteButton.disabled).toBe(true);
+  expect(archiveButton.disabled).toBe(true);
 });

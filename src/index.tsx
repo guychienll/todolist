@@ -7,7 +7,31 @@ import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
-  font-family: "Amatic SC", cursive;
+  *{
+      font-family: "Amatic SC", cursive;
+    border-radius:3px;
+  }
+  input{
+    font-size: 1.5rem;
+    border: 2px solid #000;
+    ::placeholder{
+      font-size: 1.5rem;
+    }
+  }
+  button{
+    font-size: 1rem;
+    border: 2px solid #000;
+    :disabled{
+    border: 2px solid #bbb;
+    }
+    :active{
+      font-size: 1.5rem;
+      outline: none;
+    }
+  }
+  li{
+      font-family:  "Amatic SC", cursive;
+  }
 `;
 
 ReactDOM.render(
