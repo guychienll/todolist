@@ -128,3 +128,17 @@ test("when clicked save button should update the change of the items", () => {
   expect(queryByText(/buy a coffee/)).not.toBeNull();
   expect(queryByText(/go to bank/)).toBeNull();
 });
+
+test("when editing the edit and delete button should be disabled", () => {
+  const { getByTestId, getByText } = render(<App></App>);
+  const input = getByTestId(/todoInput/) as HTMLInputElement;
+  const addButton = getByTestId(/addButton/) as HTMLButtonElement;
+  const editButton = getByTestId(/editButton/) as HTMLButtonElement;
+  const deleteButton = getByTestId(/deleteButton/) as HTMLButtonElement;
+  fireEvent.change(input, { target: { value: "go to bank" } });
+  fireEvent.click(addButton);
+  fireEvent.click(getByText(/go to bank/));
+  fireEvent.click(editButton);
+  expect(editButton.disabled).toBe(true);
+  expect(deleteButton.disabled).toBe(true);
+});

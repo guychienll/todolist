@@ -122,6 +122,7 @@ function App() {
         clickEditHandler={clickEditHandler}
         workingBuffer={workingBuffer}
         deleteItemsHandler={deleteItemsHandler}
+        isEditing={isEditing}
       />
     </Container>
   );

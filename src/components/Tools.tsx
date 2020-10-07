@@ -15,25 +15,29 @@ const StyledTools = styled.div`
 interface IProps {
   deleteItemsHandler: () => void;
   clickEditHandler: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  isEditing: boolean;
   workingBuffer: string[];
 }
 export function Tools({
   workingBuffer,
+  isEditing,
   deleteItemsHandler,
   clickEditHandler,
 }: IProps) {
+  const isDeleteDisabled = workingBuffer.length <= 0 || isEditing;
+  const isEditDisabled = workingBuffer.length !== 1 || isEditing;
   return (
     <StyledTools>
       <button
         onClick={deleteItemsHandler}
-        disabled={workingBuffer.length <= 0}
+        disabled={isDeleteDisabled}
         data-testid="deleteButton"
       >
         Delete
       </button>
       <button
         onClick={clickEditHandler}
-        disabled={workingBuffer.length !== 1}
+        disabled={isEditDisabled}
         data-testid="editButton"
         value={workingBuffer ? workingBuffer[0] : 0}
       >
