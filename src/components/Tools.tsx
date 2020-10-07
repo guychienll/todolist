@@ -15,6 +15,7 @@ const StyledTools = styled.div`
 interface IProps {
   archiveItemsHandler: () => void;
   clickEditHandler: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  completeItemsHandler: () => void;
   isEditing: boolean;
   workingBuffer: string[];
 }
@@ -23,11 +24,19 @@ export function Tools({
   isEditing,
   archiveItemsHandler,
   clickEditHandler,
+  completeItemsHandler,
 }: IProps) {
   const isArchiveDisabled = workingBuffer.length <= 0 || isEditing;
   const isEditDisabled = workingBuffer.length !== 1 || isEditing;
   return (
     <StyledTools>
+      <button
+        onClick={completeItemsHandler}
+        disabled={workingBuffer.length <= 0 || isEditing}
+        data-testid="completeButton"
+      >
+        complete
+      </button>
       <button
         onClick={archiveItemsHandler}
         disabled={isArchiveDisabled}

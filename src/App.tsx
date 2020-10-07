@@ -30,6 +30,7 @@ function App() {
   } as Item);
   const [workingBuffer, setWorkingBuffer] = useState([] as string[]);
   const [isEditing, setIsEditing] = useState(false);
+  const [tabState, setTabState] = useState(ENUM_ITEM_PROCESS_TYPE.UNDONE);
 
   const changeItemBufferHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -49,13 +50,28 @@ function App() {
       process: ENUM_ITEM_PROCESS_TYPE.UNKNOWN,
     } as Item);
   };
+
+  const completeItemsHandler = () => {
+    workingBuffer.forEach((id) => {
+      const cloneItems = items;
+      const itemIndexWhichWouldBeCompleted = cloneItems.findIndex((item) => {
+        return item.id === id;
+      });
+      cloneItems[itemIndexWhichWouldBeCompleted].process =
+        ENUM_ITEM_PROCESS_TYPE.DONE;
+      setItems(cloneItems);
+    });
+    setWorkingBuffer([]);
+  };
+
   const archiveItemsHandler = () => {
     workingBuffer.forEach((id) => {
       const cloneItems = items;
-      const itemIndexWhichWouldBeDeleted = cloneItems.findIndex((item) => {
+      const itemIndexWhichWouldBeArchived = cloneItems.findIndex((item) => {
         return item.id === id;
       });
-      cloneItems.splice(itemIndexWhichWouldBeDeleted, 1);
+      cloneItems[itemIndexWhichWouldBeArchived].process =
+        ENUM_ITEM_PROCESS_TYPE.ARCHIVED;
       setItems(cloneItems);
     });
     setWorkingBuffer([]);
@@ -101,6 +117,10 @@ function App() {
     setIsEditing(false);
     setWorkingBuffer([]);
   };
+  const clickTabHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const { value } = e.currentTarget;
+    setTabState(parseInt(value));
+  };
 
   return (
     <Container>
@@ -116,8 +136,11 @@ function App() {
         workingBuffer={workingBuffer}
         AddItemInWorkingBuffer={AddItemInWorkingBuffer}
         items={items}
+        clickTabHandler={clickTabHandler}
+        tabState={tabState}
       />
       <Tools
+        completeItemsHandler={completeItemsHandler}
         clickEditHandler={clickEditHandler}
         workingBuffer={workingBuffer}
         archiveItemsHandler={archiveItemsHandler}

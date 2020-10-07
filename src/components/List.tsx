@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { ENUM_ITEM_PROCESS_TYPE } from "../enum/ENUM_ITEM_PROCESS_TYPE";
 import { Item } from "../interface/Item";
 import { Tabs } from "./Tabs";
 
@@ -7,14 +8,23 @@ interface IProps {
   items: Item[];
   AddItemInWorkingBuffer: (e: React.ChangeEvent<HTMLInputElement>) => void;
   workingBuffer: string[];
+  tabState: ENUM_ITEM_PROCESS_TYPE;
+  clickTabHandler: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 const StyledList = styled.ul`
   width: 280px;
-  height: 300px;
+  min-height: 300px;
+  max-height: 300px;
   border: 2px solid #000;
   border-radius: 0 0 5px 5px;
   position: relative;
   margin-top: 40px;
+  h1 {
+    width: 200px;
+    text-align: center;
+    margin: auto;
+    line-height: 280px;
+  }
   li {
     display: flex;
     align-items: center;
@@ -22,7 +32,7 @@ const StyledList = styled.ul`
     font-size: 1.2rem;
     cursor: pointer;
     user-select: none;
-    width: 200px;
+    max-width: 260px;
     white-space: nowrap;
     overflow-x: hidden;
     text-overflow: ellipsis;
@@ -59,11 +69,26 @@ const StyledList = styled.ul`
     }
   }
 `;
-export function List({ items, AddItemInWorkingBuffer, workingBuffer }: IProps) {
+
+export function List({
+  items,
+  AddItemInWorkingBuffer,
+  workingBuffer,
+  tabState,
+  clickTabHandler,
+}: IProps) {
   return (
     <StyledList>
-      <Tabs />
+      <Tabs clickTabHandler={clickTabHandler} />
+      {items.filter((item) => {
+        return item.process === tabState;
+      }).length === 0 ? (
+        <h1>No Items</h1>
+      ) : null}
       {items
+        .filter((item) => {
+          return item.process === tabState;
+        })
         .sort((a, b) => {
           return parseInt(a.id) - parseInt(b.id);
         })

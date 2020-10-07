@@ -1,5 +1,5 @@
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, queryByText, render, screen } from "@testing-library/react";
 import App from "./App";
 
 test("the element should existed when initialization", () => {
@@ -9,6 +9,7 @@ test("the element should existed when initialization", () => {
   const input = queryByTestId(/todoInput/);
   const addButton = queryByTestId(/addButton/);
   const archiveButton = queryByTestId(/archiveButton/);
+  const completeButton = queryByTestId(/completeButton/);
   const editButton = queryByTestId(/editButton/);
   const saveButton = queryByTestId(/saveButton/);
   const doneButton = queryByTestId(/^doneButton$/);
@@ -23,6 +24,7 @@ test("the element should existed when initialization", () => {
   expect(doneButton).not.toBeNull();
   expect(undoneButton).not.toBeNull();
   expect(archivedButton).not.toBeNull();
+  expect(completeButton).not.toBeNull();
   expect(saveButton).toBeNull();
 });
 
@@ -141,16 +143,63 @@ test("when clicked save button should update the change of the items", () => {
   expect(queryByText(/go to bank/)).toBeNull();
 });
 
-test("when editing the edit and delete button should be disabled", () => {
+test("when editing all tools should be disabled", () => {
   const { getByTestId, getByText } = render(<App></App>);
   const input = getByTestId(/todoInput/) as HTMLInputElement;
   const addButton = getByTestId(/addButton/) as HTMLButtonElement;
   const editButton = getByTestId(/editButton/) as HTMLButtonElement;
   const archiveButton = getByTestId(/archiveButton/) as HTMLButtonElement;
+  const completeButton = getByTestId(/completeButton/) as HTMLButtonElement;
   fireEvent.change(input, { target: { value: "go to bank" } });
   fireEvent.click(addButton);
   fireEvent.click(getByText(/go to bank/));
   fireEvent.click(editButton);
   expect(editButton.disabled).toBe(true);
   expect(archiveButton.disabled).toBe(true);
+  expect(completeButton.disabled).toBe(true);
+});
+
+test("when no working buffer complete button should disabled", () => {
+  const { getByTestId, getByText } = render(<App></App>);
+  const input = getByTestId(/todoInput/) as HTMLInputElement;
+  const addButton = getByTestId(/addButton/) as HTMLButtonElement;
+  const completeButton = getByTestId(/completeButton/) as HTMLButtonElement;
+  expect(completeButton.disabled).toBe(true);
+  fireEvent.change(input, { target: { value: "go to bank" } });
+  fireEvent.click(addButton);
+  fireEvent.click(getByText(/go to bank/));
+  expect(completeButton.disabled).toBe(false);
+});
+
+test("when click complete button should change all the process of items to done", () => {
+  const { getByTestId, getByText, queryByText } = render(<App></App>);
+  const input = getByTestId(/todoInput/) as HTMLInputElement;
+  const addButton = getByTestId(/addButton/) as HTMLButtonElement;
+  const completeButton = getByTestId(/completeButton/) as HTMLButtonElement;
+  const doneButton = getByTestId(/^doneButton$/);
+  expect(completeButton.disabled).toBe(true);
+  fireEvent.change(input, { target: { value: "go to bank" } });
+  fireEvent.click(addButton);
+  fireEvent.click(getByText(/go to bank/));
+  fireEvent.click(completeButton);
+  expect(queryByText(/go to bank/)).toBeNull();
+  fireEvent.click(doneButton);
+  expect(queryByText(/go to bank/)).not.toBeNull();
+});
+
+test("when no items on board should show no items on board", () => {
+  const { getByTestId, getByText, queryByText } = render(<App></App>);
+  const input = getByTestId(/todoInput/) as HTMLInputElement;
+  const addButton = getByTestId(/addButton/) as HTMLButtonElement;
+  const completeButton = getByTestId(/completeButton/) as HTMLButtonElement;
+  const doneButton = getByTestId(/^doneButton$/);
+  expect(queryByText(/No Items/)).not.toBeNull();
+  fireEvent.change(input, { target: { value: "go to bank" } });
+  fireEvent.click(addButton);
+  expect(queryByText(/No Items/)).toBeNull();
+  fireEvent.click(getByText(/go to bank/));
+  fireEvent.click(completeButton);
+  expect(queryByText(/No Items/)).not.toBeNull();
+  fireEvent.click(doneButton);
+  expect(queryByText(/No Items/)).toBeNull();
 });

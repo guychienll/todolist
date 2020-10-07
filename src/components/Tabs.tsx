@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { ENUM_ITEM_PROCESS_TYPE } from "../enum/ENUM_ITEM_PROCESS_TYPE";
 
 const StlyedTabs = styled.div`
   display: flex;
@@ -23,12 +24,35 @@ const StlyedTabs = styled.div`
     }
   }
 `;
-export function Tabs() {
+
+interface IProps {
+  clickTabHandler: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+export function Tabs({ clickTabHandler }: IProps) {
   return (
     <StlyedTabs>
-      <button data-testid="doneButton">Done</button>
-      <button data-testid="undoneButton">Undone</button>
-      <button data-testid="archivedButton">Archived</button>
+      <button
+        onClick={clickTabHandler}
+        value={ENUM_ITEM_PROCESS_TYPE.UNDONE}
+        data-testid="undoneButton"
+      >
+        Undone
+      </button>
+      <button
+        onClick={clickTabHandler}
+        value={ENUM_ITEM_PROCESS_TYPE.DONE}
+        data-testid="doneButton"
+      >
+        Done
+      </button>
+      <button
+        onClick={clickTabHandler}
+        value={ENUM_ITEM_PROCESS_TYPE.ARCHIVED}
+        data-testid="archivedButton"
+      >
+        Archived
+      </button>
     </StlyedTabs>
   );
 }
