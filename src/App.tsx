@@ -17,7 +17,6 @@ const Container = styled.div`
   h1 {
     font-size: 4rem;
     padding: 15px;
-    font-family: "Amatic SC", cursive;
   }
 `;
 

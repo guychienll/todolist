@@ -7,30 +7,21 @@ import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
-  *{
-      font-family: "Amatic SC", cursive;
-    border-radius:3px;
-  }
-  input{
-    font-size: 1.5rem;
-    border: 2px solid #000;
-    ::placeholder{
-      font-size: 1.5rem;
-    }
-  }
+  * , h1 , button ,li {
+    font-family: "Amatic SC" , cursive;
+  } 
   button{
     font-size: 1rem;
+    border-radius:3px;
     border: 2px solid #000;
+    cursor:pointer;
     :disabled{
-    border: 2px solid #bbb;
+      border: 2px solid #bbb;
     }
     :active{
       font-size: 1.5rem;
       outline: none;
     }
-  }
-  li{
-      font-family:  "Amatic SC", cursive;
   }
 `;
 

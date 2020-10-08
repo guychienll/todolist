@@ -6,16 +6,34 @@ export const StyledForm = styled.div`
   height: 44px;
   display: flex;
   align-items: center;
-  input {
-    box-sizing: border-box;
-    width: 250px;
-    height: inherit;
-    padding-left: 10px;
-  }
+  input,
   button {
     height: inherit;
+    transition: width ease 0.2s;
+  }
+  input {
+    width: 250px;
+    box-sizing: border-box;
+    font-size: 1.5rem;
+    border: 2px solid #000;
+    padding-left: 10px;
+    ::placeholder {
+      font-size: 1.5rem;
+    }
+  }
+  button {
     width: 50px;
     margin-left: 5px;
+  }
+  @media screen and (min-width: 414px) {
+    input {
+      width: 340px;
+    }
+  }
+  @media screen and (min-width: 767px) {
+    input {
+      width: 500px;
+    }
   }
 `;
 

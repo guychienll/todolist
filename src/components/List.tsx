@@ -13,12 +13,12 @@ interface IProps {
 }
 const StyledList = styled.ul`
   width: 280px;
-  min-height: 300px;
-  max-height: 300px;
+  min-height: calc(100vh - 280px);
   border: 2px solid #000;
   border-radius: 0 0 5px 5px;
   position: relative;
   margin-top: 40px;
+  transition: all ease 0.2s;
   h1 {
     width: 200px;
     text-align: center;
@@ -65,8 +65,14 @@ const StyledList = styled.ul`
       }
     }
     button {
-      margin: 0 0 0 20px;
+      margin-left: 20px;
     }
+  }
+  @media screen and (min-width: 414px) {
+    width: 350px;
+  }
+  @media screen and (min-width: 767px) {
+    width: 530px;
   }
 `;
 
